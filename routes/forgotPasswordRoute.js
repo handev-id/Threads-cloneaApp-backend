@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { hash } = require("bcrypt");
 const User = require("../models/userModel");
 const nodemailer = require("nodemailer");
 
@@ -25,14 +26,40 @@ router.get("/:identifier", async (req, res) => {
   }
 });
 
+router.post("/update/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { password } = req.body;
+
+    if (!password || !id) {
+      return res.status(400).json({
+        message: "Data Kurang!",
+      });
+    }
+
+    const hashPassword = await hash(password, 8);
+
+    await User.findByIdAndUpdate(id, {
+      password: hashPassword,
+    });
+
+    return res.status(200).json({
+      message: "Password Berhasil Di Update!",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+});
+
 router.post("/send-link", async (req, res) => {
   try {
     const { email: destEmail, code } = req.body;
 
-    if (!destEmail) {
+    if (!destEmail || !code) {
       return res.status(400).json({
-        success: false,
-        message: "Email harus diisi!",
+        message: "Data Kurang!",
       });
     }
 

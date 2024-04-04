@@ -30,6 +30,10 @@ app.get("/", (req, res) => {
         name: "Send Link To Email",
         description: "nodemailer is used for sending emails",
       },
+      {
+        name: "Upadate Password",
+        description: "Update password with new password",
+      },
     ],
   });
 });
