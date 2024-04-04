@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const User = require("../models/userModel");
+const nodemailer = require("nodemailer");
 
 router.get("/:identifier", async (req, res) => {
   try {
@@ -16,6 +17,45 @@ router.get("/:identifier", async (req, res) => {
     return res.status(200).json({
       success: true,
       result: user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+});
+
+router.post("/send-link", async (req, res) => {
+  try {
+    const { email: destEmail, code } = req.body;
+
+    if (!destEmail) {
+      return res.status(400).json({
+        success: false,
+        message: "Email harus diisi!",
+      });
+    }
+
+    const transport = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.GOOGLE_SMTP_EMAIL,
+        pass: process.env.GOOGLE_SMTP_PASSWORD,
+      },
+    });
+
+    const status = await transport.verify();
+
+    const sendEmail = await transport.sendMail({
+      from: process.env.GOOGLE_SMTP_EMAIL,
+      to: destEmail,
+      subject: "Threads - Verification Code",
+      html: `Your Verification Code: <b>${code}</b>`,
+    });
+
+    return res.status(200).json({
+      success: status,
+      result: sendEmail,
     });
   } catch (error) {
     return res.status(500).json({

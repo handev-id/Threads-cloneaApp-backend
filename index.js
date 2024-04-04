@@ -24,7 +24,14 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("- Forgot Password Update!");
+  res.status(200).json({
+    newFeatures: [
+      {
+        name: "Send Link To Email",
+        description: "nodemailer is used for sending emails",
+      },
+    ],
+  });
 });
 
 app.use("/auth", authRoute);
