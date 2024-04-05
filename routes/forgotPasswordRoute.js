@@ -55,6 +55,12 @@ router.post("/update/:id", async (req, res) => {
 
 router.post("/send-code", async (req, res) => {
   try {
+    function generateOTP() {
+      return Math.floor(100000 + Math.random() * 900000).toString();
+    }
+
+    const generatedOTP = generateOTP();
+
     const { email: destEmail, code } = req.body;
 
     if (!destEmail || !code) {
@@ -83,6 +89,7 @@ router.post("/send-code", async (req, res) => {
     return res.status(200).json({
       success: status,
       result: sendEmail,
+      otpCode: generatedOTP,
     });
   } catch (error) {
     return res.status(500).json({

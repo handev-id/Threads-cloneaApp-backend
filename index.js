@@ -31,7 +31,7 @@ app.get("/", (req, res) => {
         description: "nodemailer is used for sending emails",
       },
       {
-        name: "Upadate Password",
+        name: "Upadate Password & OTPCODE",
         description: "Update password with new password",
       },
     ],
