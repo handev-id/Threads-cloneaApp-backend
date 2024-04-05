@@ -61,9 +61,9 @@ router.post("/send-code", async (req, res) => {
 
     const generatedOTP = generateOTP();
 
-    const { email: destEmail, code } = req.body;
+    const { email: destEmail } = req.body;
 
-    if (!destEmail || !code) {
+    if (!destEmail) {
       return res.status(400).json({
         message: "Data Kurang!",
       });
@@ -83,7 +83,7 @@ router.post("/send-code", async (req, res) => {
       from: process.env.GOOGLE_SMTP_EMAIL,
       to: destEmail,
       subject: "Threads - Verification Code",
-      html: `Your Verification Code: <b>${code}</b>`,
+      html: `Your Verification Code: <b>${generatedOTP}</b>`,
     });
 
     return res.status(200).json({
