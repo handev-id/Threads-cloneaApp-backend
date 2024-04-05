@@ -53,7 +53,7 @@ router.post("/update/:id", async (req, res) => {
   }
 });
 
-router.post("/send-link", async (req, res) => {
+router.post("/send-code", async (req, res) => {
   try {
     const { email: destEmail, code } = req.body;
 
