@@ -7,6 +7,7 @@ const userRoute = require("./routes/userRoute");
 const commentRoute = require("./routes/commentRoute");
 const notifRoute = require("./routes/notifRoute");
 const postRoute = require("./routes/postRoute");
+const followRoute = require("./routes/user/followRoute");
 const verifyToken = require("./middlewares/verifyToken");
 const dotenv = require("dotenv").config();
 const app = express();
@@ -48,6 +49,7 @@ app.use("/user", verifyToken, userRoute);
 app.use("/comment", verifyToken, commentRoute);
 app.use("/post", verifyToken, postRoute);
 app.use("/notifications", verifyToken, notifRoute);
+app.use("/follow", verifyToken, followRoute);
 
 const PORT = process.env.PORT || 3000;
 
