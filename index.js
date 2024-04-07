@@ -34,6 +34,10 @@ app.get("/", (req, res) => {
         name: "Upadate Password & OTPCODE",
         description: "Update password with new password",
       },
+      {
+        name: "Add Followers",
+        description: "AddFollowers and AddFollowing features",
+      },
     ],
   });
 });

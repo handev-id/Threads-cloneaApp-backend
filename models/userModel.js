@@ -21,6 +21,18 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    followers: {
+      type: Array,
+      default: [],
+    },
+    following: {
+      type: Array,
+      default: [],
+    },
+    bio: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true, bufferTimeoutMS: 60000 }
 );

@@ -35,7 +35,9 @@ router.post("/create", async (req, res) => {
   const username = req.user.username;
 
   if (!caption || !username || !image) {
-    throw new Error("All fields are required");
+    return res.status(400).json({
+      message: "Semua field harus diisi!",
+    });
   }
 
   await Post.create({
