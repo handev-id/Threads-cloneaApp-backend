@@ -30,3 +30,5 @@ router.patch("/add-followers?userId=:", async (req, res) => {
     });
   }
 });
+
+module.exports = router;
