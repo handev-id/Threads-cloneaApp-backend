@@ -10,7 +10,7 @@ const notifSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    username: {
+    from: {
       type: String,
       required: true,
     },

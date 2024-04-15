@@ -1,7 +1,43 @@
 const router = require("express").Router();
 const User = require("../models/userModel");
 
-router.get("/:id", async (req, res) => {
+router.get("/", async (req, res) => {
+  try {
+    const users = await User.find();
+    return res.status(200).json({
+      success: true,
+      result: users,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
+router.get("/search?username=:username", async (req, res) => {
+  try {
+    const username = req.params.username;
+    const user = await User.find({
+      $or: [
+        { username: { $regex: username, $options: "i" } },
+        { fullname: { $regex: username, $options: "i" } },
+      ],
+    });
+    return res.status(200).json({
+      success: true,
+      result: user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
+router.get("/profile/:id", async (req, res) => {
   try {
     const id = req.params.id;
     if (!id) {

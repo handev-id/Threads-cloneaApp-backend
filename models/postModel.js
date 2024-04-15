@@ -6,6 +6,10 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    avatar: {
+      type: String,
+      required: true,
+    },
     caption: {
       type: String,
       required: true,
@@ -19,8 +23,8 @@ const postSchema = new mongoose.Schema(
       default: [],
     },
     likes: {
-      type: Number,
-      default: 0,
+      type: Array,
+      default: [],
     },
   },
   { timestamps: true }

@@ -9,6 +9,7 @@ router.get("/:identifier", async (req, res) => {
     const user = await User.findOne().or([
       { email: identifier },
       { username: identifier },
+      { fullname: identifier },
     ]);
     if (!user) {
       return res.status(404).json({
@@ -18,33 +19,6 @@ router.get("/:identifier", async (req, res) => {
     return res.status(200).json({
       success: true,
       result: user,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: error.message,
-    });
-  }
-});
-
-router.post("/update/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { password } = req.body;
-
-    if (!password || !id) {
-      return res.status(400).json({
-        message: "Data Kurang!",
-      });
-    }
-
-    const hashPassword = await hash(password, 8);
-
-    await User.findByIdAndUpdate(id, {
-      password: hashPassword,
-    });
-
-    return res.status(200).json({
-      message: "Password Berhasil Di Update!",
     });
   } catch (error) {
     return res.status(500).json({
@@ -82,14 +56,41 @@ router.post("/send-code", async (req, res) => {
     const sendEmail = await transport.sendMail({
       from: process.env.GOOGLE_SMTP_EMAIL,
       to: destEmail,
-      subject: "Threads - Verification Code",
-      html: `Your Verification Code: <b>${generatedOTP}</b>`,
+      subject: "Threads - Kode Verifikasi",
+      html: `Kode Verifikasi Kamu Di Threads CloneApp: <b>${generatedOTP}</b> <br/> <br /> By:<a href="https://handev.my.id">Handev</a>`,
     });
 
     return res.status(200).json({
       success: status,
       result: sendEmail,
       otpCode: generatedOTP,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+});
+
+router.post("/update/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { password } = req.body;
+
+    if (!password || !id) {
+      return res.status(400).json({
+        message: "Data Kurang!",
+      });
+    }
+
+    const hashPassword = await hash(password, 8);
+
+    await User.findByIdAndUpdate(id, {
+      password: hashPassword,
+    });
+
+    return res.status(200).json({
+      message: "Password Berhasil Di Update!",
     });
   } catch (error) {
     return res.status(500).json({

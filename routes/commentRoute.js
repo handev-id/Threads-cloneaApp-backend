@@ -3,9 +3,9 @@ const Comment = require("../models/commentModel");
 const Post = require("../models/postModel");
 const Notifications = require("../models/notifModel");
 
-router.get("/list", async (req, res) => {
+router.get("/list/:postId", async (req, res) => {
   try {
-    const postId = req.query.postId;
+    const postId = req.params.postId;
 
     if (!postId) {
       return res.status(404).json({
@@ -33,10 +33,10 @@ router.get("/list", async (req, res) => {
 router.post("/create", async (req, res) => {
   try {
     const { comment } = req.body;
-    const { username, image } = req.user;
+    const { username, avatar } = req.user;
     const { userWhoPosted, postId } = req.query;
 
-    if (!postId || !username || !comment || !image) {
+    if (!postId || !username || !comment || !avatar) {
       return res.status(400).json({
         success: false,
         message: "Semua field harus diisi!",
@@ -47,7 +47,7 @@ router.post("/create", async (req, res) => {
       $push: {
         replies: {
           username: username,
-          image: image,
+          avatar: avatar,
         },
       },
     });
@@ -56,7 +56,7 @@ router.post("/create", async (req, res) => {
       await Notifications.create({
         userWhoPosted,
         postId,
-        username,
+        from: username,
         notifType: "comment",
         message: `${username} Membalas Postinganmu!`,
       });
@@ -73,7 +73,7 @@ router.post("/create", async (req, res) => {
       postId,
       username,
       comment,
-      image,
+      avatar,
     });
 
     return res.status(201).json({

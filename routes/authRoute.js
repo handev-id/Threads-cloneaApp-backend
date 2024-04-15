@@ -5,9 +5,9 @@ const jwt = require("jsonwebtoken");
 
 router.post("/register", async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { email, password, fullname } = req.body;
 
-    if (!username || !email || !password) {
+    if (!email || !password || !fullname) {
       return res
         .status(400)
         .json({ success: false, message: "Semua field harus diisi" });
@@ -15,22 +15,23 @@ router.post("/register", async (req, res) => {
 
     const hashPassword = await bcrypt.hash(password, 8);
 
-    const existingUsername = await User.findOne({ username }).exec();
-    const existingEmail = await User.findOne({ email }).exec();
+    const existingFullname = await User.findOne({ fullname });
+    const existingEmail = await User.findOne({ email });
 
-    if (existingUsername || existingEmail) {
+    if (existingFullname || existingEmail) {
       return res.status(400).json({
         success: false,
-        message: "Username / Email sudah terdaftar",
+        message: existingFullname
+          ? "Username sudah terdaftar"
+          : "Email sudah terdaftar",
       });
     }
 
     const newUser = await User.create({
-      username,
+      fullname,
+      username: `${fullname.toLowerCase().replace(/\s/g, "")}`,
       email,
       password: hashPassword,
-      image:
-        "https://res.cloudinary.com/dwfwqx75z/image/upload/v1708563877/socialapps/x9idyfpnhd4lmcn91z4x.jpg",
     });
 
     const { password: pass, ...rest } = newUser._doc;
@@ -59,7 +60,11 @@ router.post("/login", async (req, res) => {
     }
 
     const existingUser = await User.findOne({
-      $or: [{ email: identifier }, { username: identifier }],
+      $or: [
+        { email: identifier },
+        { username: identifier },
+        { fullname: identifier },
+      ],
     });
 
     if (!existingUser) {
@@ -83,7 +88,7 @@ router.post("/login", async (req, res) => {
         id: existingUser._id,
         email: existingUser.email,
         username: existingUser.username,
-        image: existingUser.image,
+        avatar: existingUser.avatar,
       },
       process.env.JWT_SECRET_KEY
     );

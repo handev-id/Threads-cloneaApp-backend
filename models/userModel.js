@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
+    fullname: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     username: {
       type: String,
       required: true,
@@ -17,9 +22,10 @@ const userSchema = new mongoose.Schema(
       required: true,
       min: 8,
     },
-    image: {
+    avatar: {
       type: String,
-      required: true,
+      default:
+        "https://res.cloudinary.com/dwfwqx75z/image/upload/v1708563877/socialapps/x9idyfpnhd4lmcn91z4x.jpg",
     },
     followers: {
       type: Array,

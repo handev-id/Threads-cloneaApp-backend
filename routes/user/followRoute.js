@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const User = require("../../models/userModel");
 
-router.patch("/add-followers?userId=:", async (req, res) => {
+router.patch("/add-follower", async (req, res) => {
   try {
     const userIdToFollow = req.query.userId;
     const follower = req.user.username;

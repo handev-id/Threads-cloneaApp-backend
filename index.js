@@ -40,12 +40,17 @@ app.get("/", (req, res) => {
         description: "AddFollowers and AddFollowing features",
       },
     ],
+    updateCode: [
+      {
+        update: "model and route",
+      },
+    ],
   });
 });
 
 app.use("/auth", authRoute);
 app.use("/auth/forgot-password", forgotPasswordRoute);
-app.use("/user", verifyToken, userRoute);
+app.use("/users", verifyToken, userRoute);
 app.use("/comment", verifyToken, commentRoute);
 app.use("/post", verifyToken, postRoute);
 app.use("/notifications", verifyToken, notifRoute);
