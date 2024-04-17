@@ -41,7 +41,7 @@ app.use("/auth", authRoute);
 app.use("/auth/forgot-password", forgotPasswordRoute);
 app.use("/users", verifyToken, userRoute);
 
-app.use("/posts", postRoute);
+app.use("/post", verifyToken, postRoute);
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

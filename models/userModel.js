@@ -29,13 +29,11 @@ const userSchema = new mongoose.Schema(
     },
     followers: {
       type: Array,
-      default: [String],
-      unique: true,
+      default: [],
     },
     following: {
       type: Array,
-      default: [String],
-      unique: true,
+      default: [],
     },
     bio: {
       type: String,
