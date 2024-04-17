@@ -16,9 +16,9 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/search?username=:username", async (req, res) => {
+router.get("/search", async (req, res) => {
   try {
-    const username = req.params.username;
+    const username = req.query.username;
     const user = await User.find({
       $or: [
         { username: { $regex: username, $options: "i" } },

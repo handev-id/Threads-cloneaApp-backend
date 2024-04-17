@@ -1,0 +1,38 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Threads Clone app - Api Docs",
+    "description": "Api Docs List",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "development"
+    },
+    {
+      "url": "http://localhost:3000",
+      "description": "production"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authentication"
+    }
+  ],
+  "paths": {
+    "/auth": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Authentication",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  }
+}

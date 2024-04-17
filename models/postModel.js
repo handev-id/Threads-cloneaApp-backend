@@ -2,12 +2,9 @@ const mongoose = require("mongoose");
 
 const postSchema = new mongoose.Schema(
   {
-    username: {
-      type: String,
-      required: true,
-    },
-    avatar: {
-      type: String,
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       required: true,
     },
     caption: {
@@ -18,14 +15,18 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    replies: {
-      type: Array,
-      default: [],
-    },
-    likes: {
-      type: Array,
-      default: [],
-    },
+    replies: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Reply",
+      },
+    ],
+    likes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   { timestamps: true }
 );
