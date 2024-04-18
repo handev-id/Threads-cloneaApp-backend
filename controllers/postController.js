@@ -1,5 +1,6 @@
 const Post = require("../models/postModel");
 const Reply = require("../models/replyModel");
+const Notif = require("../models/notifModel");
 
 const getPosts = async (req, res) => {
   try {
@@ -81,8 +82,10 @@ const likePost = async (req, res) => {
   try {
     const postId = req.params.postId;
     const userId = req.user.id;
+    const username = req?.user?.username;
+    const recipientId = req.query.recipientId;
 
-    if (!postId || !userId) {
+    if (!postId || !userId || !username || !recipientId) {
       return res.status(400).json({
         success: false,
         message: "Post Id harus diisi",
@@ -92,6 +95,7 @@ const likePost = async (req, res) => {
     const likes = await Post.findById(postId).select("likes");
     const likesArray = likes.likes;
 
+    // Check if the user has already liked the post
     if (likesArray.includes(userId)) {
       await Post.findByIdAndUpdate(postId, {
         $pull: { likes: userId },
@@ -101,6 +105,28 @@ const likePost = async (req, res) => {
         $push: { likes: userId },
       });
     }
+
+    const existingNotifications = await Notif.findOne({
+      postId,
+      recipientId,
+      senderId: userId,
+      notifType: "like",
+    });
+
+    if (existingNotifications) {
+      return res.status(200).json({
+        success: true,
+        result: likesArray.length,
+      });
+    }
+
+    const newNotif = await Notif.create({
+      recipientId,
+      senderId: userId,
+      notifType: "like",
+      postId,
+      message: `${username} menyukai postinganmu`,
+    });
 
     return res.status(200).json({
       success: true,
@@ -117,20 +143,48 @@ const likePost = async (req, res) => {
 const createReply = async (req, res) => {
   try {
     const postId = req.params.postId;
+    const recipientId = req.query.recipientId;
     const userId = req.user.id;
+    const username = req?.user?.username;
     const { reply } = req.body;
 
-    if (!postId || !userId || !reply) {
+    if (!postId || !userId || !reply || !username || !recipientId) {
       return res.status(400).json({
         success: false,
         message: "Data Kurang!",
       });
     }
 
+    await Post.findByIdAndUpdate(postId, {
+      $push: { replies: userId },
+    });
+
     const newReply = await Reply.create({
       userId,
       postId,
       reply,
+    });
+
+    const existingNotifications = await Notif.findOne({
+      postId,
+      senderId: userId,
+      recipientId,
+      notifType: "reply",
+    });
+
+    if (existingNotifications) {
+      return res.status(200).json({
+        success: true,
+        result: newReply,
+      });
+    }
+
+    await Notif.create({
+      recipientId: recipientId,
+      senderId: userId,
+      notifType: "reply",
+      postId,
+      message: `${username} membalas postinganmu`,
     });
 
     return res.status(200).json({

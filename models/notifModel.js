@@ -3,11 +3,11 @@ const mongoose = require("mongoose");
 const notifSchema = new mongoose.Schema(
   {
     recipientId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
-    from: {
-      type: String,
+    senderId: {
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
     message: {
@@ -17,6 +17,10 @@ const notifSchema = new mongoose.Schema(
     notifType: {
       type: String,
       required: true,
+    },
+    postId: {
+      type: String,
+      required: false,
     },
   },
   { timestamps: true }

@@ -11,7 +11,7 @@ const router = require("express").Router();
 router.get("/list", getPosts);
 router.get("/:postId", getPostById);
 router.post("/create", createPost);
-router.post("/like/:postId", likePost);
-router.post("/reply/:postId", createReply);
+router.post("/like/:postId", likePost); // QUERY: ?recipientId=
+router.post("/reply/:postId", createReply); // QUERY: ?recipientId=
 
 module.exports = router;
