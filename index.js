@@ -5,6 +5,7 @@ const authRoute = require("./routes/authRoute");
 const forgotPasswordRoute = require("./routes/forgotPasswordRoute");
 const userRoute = require("./routes/userRoute");
 const postRoute = require("./routes/postRoute");
+const followRoute = require("./routes/followRoute");
 const verifyToken = require("./middlewares/verifyToken");
 const dotenv = require("dotenv").config();
 const app = express();
@@ -33,6 +34,10 @@ app.get("/", (req, res) => {
         name: "Posts",
         desc: "clear post features",
       },
+      {
+        name: "Follow system",
+        desc: "Follow system is ready",
+      },
     ],
   });
 });
@@ -42,6 +47,8 @@ app.use("/auth/forgot-password", forgotPasswordRoute);
 app.use("/users", verifyToken, userRoute);
 
 app.use("/post", verifyToken, postRoute);
+
+app.use("/follow", verifyToken, followRoute);
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
