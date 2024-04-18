@@ -28,10 +28,10 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.status(200).json({
-    newFeatures: [],
-    updateCode: [
+    newFeatures: [
       {
-        update: "model and route new",
+        name: "Posts",
+        desc: "clear post features",
       },
     ],
   });

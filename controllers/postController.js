@@ -19,6 +19,34 @@ const getPosts = async (req, res) => {
   }
 };
 
+const getPostById = async (req, res) => {
+  try {
+    const postId = req.params.postId;
+
+    if (!postId) {
+      return res.status(400).json({
+        success: false,
+        message: "Post Id harus diisi",
+      });
+    }
+
+    const post = await Post.findById(postId).populate(
+      "userId",
+      "username avatar"
+    );
+
+    return res.status(200).json({
+      success: true,
+      result: post,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 const createPost = async (req, res) => {
   try {
     const { caption, image } = req.body;
@@ -122,4 +150,5 @@ module.exports = {
   createPost,
   likePost,
   createReply,
+  getPostById,
 };
