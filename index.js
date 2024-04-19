@@ -5,6 +5,7 @@ const authRoute = require("./routes/authRoute");
 const forgotPasswordRoute = require("./routes/forgotPasswordRoute");
 const userRoute = require("./routes/userRoute");
 const postRoute = require("./routes/postRoute");
+const postFollowingRoute = require("./routes/postFollowingRoute");
 const followRoute = require("./routes/followRoute");
 const verifyToken = require("./middlewares/verifyToken");
 const dotenv = require("dotenv").config();
@@ -38,6 +39,10 @@ app.get("/", (req, res) => {
         name: "Follow system",
         desc: "Follow system is ready",
       },
+      {
+        name: "Post Following",
+        desc: "Post following list is ready",
+      },
     ],
   });
 });
@@ -47,6 +52,7 @@ app.use("/auth/forgot-password", forgotPasswordRoute);
 app.use("/users", verifyToken, userRoute);
 
 app.use("/post", verifyToken, postRoute);
+app.use("/post-following", verifyToken, postFollowingRoute);
 
 app.use("/follow", verifyToken, followRoute);
 const PORT = process.env.PORT || 3000;

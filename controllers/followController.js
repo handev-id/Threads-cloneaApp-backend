@@ -14,6 +14,13 @@ const followController = async (req, res) => {
       });
     }
 
+    if (userIdToFollow === userIdToFollowing) {
+      return res.status(400).json({
+        success: false,
+        message: "Tidak bisa mengikuti diri sendiri!",
+      });
+    }
+
     const user = await User.findById(userIdToFollow);
     const userFollowers = user.followers;
 
