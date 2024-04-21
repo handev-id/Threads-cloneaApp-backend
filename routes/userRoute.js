@@ -41,7 +41,10 @@ router.get("/profile/:id", async (req, res) => {
   try {
     const id = req.params.id;
     if (!id) {
-      throw new Error("Id is required");
+      return res.status(400).json({
+        success: false,
+        message: "Data Kurang!",
+      });
     }
 
     const userById = await User.findById(id);

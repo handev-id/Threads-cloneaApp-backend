@@ -7,6 +7,7 @@ const userRoute = require("./routes/userRoute");
 const postRoute = require("./routes/postRoute");
 const postFollowingRoute = require("./routes/postFollowingRoute");
 const followRoute = require("./routes/followRoute");
+const uploadImageRoute = require("./routes/uploadImageRoute");
 const verifyToken = require("./middlewares/verifyToken");
 const dotenv = require("dotenv").config();
 const app = express();
@@ -43,6 +44,10 @@ app.get("/", (req, res) => {
         name: "Post Following",
         desc: "Post following list is ready",
       },
+      {
+        name: "Upload Image",
+        desc: "Upload image with cloudinary and multer",
+      },
     ],
   });
 });
@@ -55,6 +60,7 @@ app.use("/post", verifyToken, postRoute);
 app.use("/post-following", verifyToken, postFollowingRoute);
 
 app.use("/follow", verifyToken, followRoute);
+app.use(uploadImageRoute);
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
