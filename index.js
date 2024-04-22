@@ -26,7 +26,7 @@ const connectDB = mongoose
     console.log(err);
   });
 
-app.use(cors({ origin: "https://threds-cloneapp.vercel.app" }));
+app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
