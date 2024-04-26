@@ -7,6 +7,7 @@ const userRoute = require("./routes/userRoute");
 const postRoute = require("./routes/postRoute");
 const postFollowingRoute = require("./routes/postFollowingRoute");
 const followRoute = require("./routes/followRoute");
+const savePostRoute = require("./routes/savePostRoute");
 const uploadImageRoute = require("./routes/uploadImageRoute");
 const verifyToken = require("./middlewares/verifyToken");
 const dotenv = require("dotenv").config();
@@ -52,6 +53,10 @@ app.get("/", (req, res) => {
         name: "Repost and reply",
         desc: "Repost is on and clear reply",
       },
+      {
+        name: "Save Post",
+        desc: "save POst Features",
+      },
     ],
   });
 });
@@ -62,6 +67,8 @@ app.use("/users", verifyToken, userRoute);
 
 app.use("/post", verifyToken, postRoute);
 app.use("/post-following", verifyToken, postFollowingRoute);
+
+app.use("/save-post", verifyToken, savePostRoute);
 
 app.use("/follow", verifyToken, followRoute);
 app.use(uploadImageRoute);
