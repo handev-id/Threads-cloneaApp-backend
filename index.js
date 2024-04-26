@@ -48,6 +48,10 @@ app.get("/", (req, res) => {
         name: "Upload Image",
         desc: "Upload image with cloudinary and multer",
       },
+      {
+        name: "Repost and reply",
+        desc: "Repost is on and clear reply",
+      },
     ],
   });
 });
