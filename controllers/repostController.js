@@ -1,37 +1,35 @@
 const Post = require("../models/postModel");
+const Notif = require("../models/notifModel");
 
 const createRepost = async (req, res) => {
   try {
     const postId = req.params.postId;
-    const isRepost = req.query.isRepost;
-    const { caption, username, avatar, captionPost } = req.body;
     const userId = req.user.id;
+    const recipientId = req.query.recipientId;
+    const reposted = req.user.username;
+    const repostedAvatar = req.user.avatar;
 
-    if (
-      !isRepost ||
-      !postId ||
-      !userId ||
-      !username ||
-      !avatar ||
-      !caption ||
-      !captionPost
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "Data Kuang!",
-      });
-    }
-
-    const post = await Post.create({
-      userId,
-      isRepost,
-      caption,
-      repostData: {
-        username,
-        avatar,
-        caption: captionPost,
+    const post = await Post.findById(postId);
+    await Post.create({
+      postId: postId,
+      image: post.image,
+      userId: post.userId,
+      caption: post.caption,
+      reposted: {
+        username: reposted,
+        avatar: repostedAvatar,
       },
     });
+
+    if (recipientId !== userId) {
+      await Notif.create({
+        postId,
+        senderId: userId,
+        recipientId: recipientId,
+        notifType: "repost",
+        message: `${reposted} Merepost Postinganmu`,
+      });
+    }
 
     return res.status(201).json({
       success: true,

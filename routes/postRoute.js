@@ -13,10 +13,10 @@ const router = require("express").Router();
 router.get("/list", getPosts);
 router.get("/:postId", getPostById);
 router.post("/create", createPost);
-router.post("/like/:postId", likePost); // QUERY: ?recipientId=
-router.post("/repost/:postId", createRepost); // QUERY: ?isRepost=
+router.post("/like/:postId", likePost); // QUERY: ?recipientId= (for notifications)
+router.post("/repost/:postId", createRepost); // QUERY: ?recipientId= (for notifications)
 router.delete("/delete/:postId", deletePost);
 
-router.post("/create-reply/:postId", createReply); // QUERY: ?recipientId=
+router.post("/create-reply/:postId", createReply); // QUERY: ?recipientId= (for notifications)
 router.get("/reply/:postId", getReplies);
 module.exports = router;

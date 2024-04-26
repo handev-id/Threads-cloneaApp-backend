@@ -15,12 +15,12 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    isRepost: {
-      type: Boolean,
+    reposted: {
+      type: Object,
       required: false,
     },
-    repostData: {
-      type: Object,
+    postId: {
+      type: String,
       required: false,
     },
     replies: [
