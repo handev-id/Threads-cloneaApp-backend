@@ -15,7 +15,7 @@ router.get("/:postId", getPostById);
 router.post("/create", createPost);
 router.post("/like/:postId", likePost); // QUERY: ?recipientId= (for notifications)
 router.post("/repost/:postId", createRepost); // QUERY: ?recipientId= (for notifications)
-router.delete("/delete/:postId", deletePost);
+router.delete("/delete/:postId", deletePost); // QUERY: ?isReposted
 
 router.post("/create-reply/:postId", createReply); // QUERY: ?recipientId= (for notifications)
 router.get("/reply/:postId", getReplies);

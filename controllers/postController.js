@@ -170,11 +170,20 @@ const likePost = async (req, res) => {
 const deletePost = async (req, res) => {
   try {
     const postId = req.params.postId;
+    const isReposted = req.query.isReposted;
+    let isDeleteReposted = isReposted === "true" ? true : false;
     if (!postId) {
       return res.status(400).json({ success: false, message: "Data Kurang" });
     }
 
-    await Post.findByIdAndDelete({ _id: postId });
+    const existingRepost = await Repost.findOne({ postId });
+    if (existingRepost) {
+      await Repost.findByIdAndDelete({ _id: postId });
+    }
+
+    if (!isDeleteReposted) {
+      await Post.findByIdAndDelete({ _id: postId });
+    }
 
     return res.status(200).json({
       success: true,
