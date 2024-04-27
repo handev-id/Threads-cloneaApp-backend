@@ -6,7 +6,7 @@ const {
 
 const router = require("express").Router();
 
-router.patch("/:userIdToFollow", followController);
+router.post("/:userIdToFollow", followController);
 router.get("/followers-list", getFollowersList); // BY ID FROM TOKEN
 router.get("/following-list", getFollowingList); // BY ID FROM TOKEN
 

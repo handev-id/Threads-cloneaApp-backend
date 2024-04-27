@@ -15,9 +15,11 @@ const getPostsFollowing = async (req, res) => {
     const following = await User.findById(userId).select("following");
     const posts = await Post.find({
       userId: { $in: following.following },
-    }).sort({
-      createdAt: -1,
-    });
+    })
+      .sort({
+        createdAt: -1,
+      })
+      .populate("userId", "username avatar");
 
     return res.status(200).json({
       success: true,

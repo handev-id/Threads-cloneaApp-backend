@@ -1,4 +1,4 @@
-const Post = require("../models/postModel");
+const Repost = require("../models/repostModel");
 const Notif = require("../models/notifModel");
 
 const createRepost = async (req, res) => {
@@ -6,18 +6,16 @@ const createRepost = async (req, res) => {
     const postId = req.params.postId;
     const userId = req.user.id;
     const recipientId = req.query.recipientId;
-    const reposted = req.user.username;
+    const repostedUsername = req.user.username;
     const repostedAvatar = req.user.avatar;
 
-    const post = await Post.findById(postId);
-    await Post.create({
-      postId: postId,
-      image: post.image,
-      userId: post.userId,
-      caption: post.caption,
+    const repost = await Repost.create({
+      _id: postId,
+      userId,
+      postId,
       reposted: {
-        username: reposted,
         avatar: repostedAvatar,
+        username: repostedUsername,
       },
     });
 

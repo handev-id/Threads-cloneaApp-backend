@@ -15,10 +15,6 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    reposted: {
-      type: Object,
-      required: false,
-    },
     postId: {
       type: String,
       required: false,
