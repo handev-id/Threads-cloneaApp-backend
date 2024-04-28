@@ -18,16 +18,27 @@ router.get("/", async (req, res) => {
 
 router.get("/search", async (req, res) => {
   try {
-    const username = req.query.username;
-    const user = await User.find({
-      $or: [
-        { username: { $regex: username, $options: "i" } },
-        { fullname: { $regex: username, $options: "i" } },
-      ],
+    const keyword = req.query.username;
+    const users = await User.find();
+    const me = req.user.id;
+
+    if (!keyword || keyword === "") {
+      const result = users.filter((user) => {
+        return user._id != me;
+      });
+      return res.status(200).json({
+        success: true,
+        result,
+      });
+    }
+
+    const result = users.filter((user) => {
+      return user._id != me && user.username.includes(keyword.toLowerCase());
     });
+
     return res.status(200).json({
       success: true,
-      result: user,
+      result,
     });
   } catch (error) {
     return res.status(500).json({
