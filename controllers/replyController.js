@@ -71,7 +71,10 @@ const getReplies = async (req, res) => {
       });
     }
 
-    const replies = await Reply.find({ postId });
+    const replies = await Reply.find({ postId }).populate(
+      "userId",
+      "username avatar"
+    );
 
     return res.status(200).json({
       success: true,
@@ -85,7 +88,31 @@ const getReplies = async (req, res) => {
   }
 };
 
+const deleteReply = async (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!id)
+      return res.status(400).json({
+        success: false,
+        message: "Data kurang",
+      });
+
+    await Reply.findByIdAndDelete({ _id: id });
+
+    return res.status(200).json({
+      success: true,
+      message: "Balasan Berhasil Di Hapus",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   createReply,
   getReplies,
+  deleteReply,
 };
