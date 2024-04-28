@@ -11,6 +11,52 @@ const getPosts = async (req, res) => {
     const reposts = await Repost.find()
       .populate("userId", "username avatar")
       .populate("postId", "caption image likes replies createdAt")
+      .populate("reposted", "username avatar")
+      .sort({
+        createdAt: -1,
+      });
+
+    const repost = reposts.map((repost) => {
+      return {
+        userId: {
+          _id: repost.userId._id,
+          username: repost.userId.username,
+          avatar: repost.userId.avatar,
+        },
+        _id: repost.postId._id,
+        postId: repost.postId._id,
+        caption: repost.postId.caption,
+        image: repost.postId.image,
+        likes: repost.postId.likes,
+        replies: repost.postId.replies,
+        createdAt: repost.createdAt,
+        reposted: repost.reposted,
+      };
+    });
+
+    const result = [...posts, ...repost];
+
+    return res.status(200).json({
+      success: true,
+      result,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const getPostsByUserId = async (req, res) => {
+  try {
+    const posts = await Post.find().populate("userId", "username avatar").sort({
+      createdAt: -1,
+    });
+
+    const reposts = await Repost.find()
+      .populate("userId", "username avatar")
+      .populate("postId", "caption image likes replies createdAt")
       .sort({
         createdAt: -1,
       });

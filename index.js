@@ -7,6 +7,7 @@ const userRoute = require("./routes/userRoute");
 const postRoute = require("./routes/postRoute");
 const postFollowingRoute = require("./routes/postFollowingRoute");
 const followRoute = require("./routes/followRoute");
+const notifRoute = require("./routes/notifRoute");
 const savePostRoute = require("./routes/savePostRoute");
 const uploadImageRoute = require("./routes/uploadImageRoute");
 const verifyToken = require("./middlewares/verifyToken");
@@ -71,6 +72,7 @@ app.use("/post-following", verifyToken, postFollowingRoute);
 app.use("/save-post", verifyToken, savePostRoute);
 
 app.use("/follow", verifyToken, followRoute);
+app.use("/notifications", verifyToken, notifRoute);
 app.use(uploadImageRoute);
 const PORT = process.env.PORT || 3000;
 

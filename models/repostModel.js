@@ -14,8 +14,9 @@ const repostSchema = new mongoose.Schema(
       required: true,
     },
     reposted: {
-      type: Object,
-      required: false,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
   },
   {

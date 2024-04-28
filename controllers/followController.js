@@ -41,6 +41,21 @@ const followController = async (req, res) => {
         $push: { following: userIdToFollow },
       });
 
+      const existingNotifications = await Notif.findOne({
+        postId: "followtype",
+        recipientId: userIdToFollow,
+        senderId: userIdToFollowing,
+        notifType: "follow",
+        message: `${username} Mulai Mengikuti Kamu`,
+      });
+
+      if (existingNotifications) {
+        return res.status(200).json({
+          success: true,
+          message: "Success unfollow",
+        });
+      }
+
       await Notif.create({
         senderId: userIdToFollowing,
         recipientId: userIdToFollow,

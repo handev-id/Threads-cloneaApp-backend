@@ -8,6 +8,7 @@ const notifSchema = new mongoose.Schema(
     },
     senderId: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       required: true,
     },
     message: {

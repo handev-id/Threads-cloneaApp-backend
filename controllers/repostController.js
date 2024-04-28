@@ -6,17 +6,14 @@ const createRepost = async (req, res) => {
     const postId = req.params.postId;
     const userId = req.user.id;
     const recipientId = req.query.recipientId;
+    const repostedId = req.user.id;
     const repostedUsername = req.user.username;
-    const repostedAvatar = req.user.avatar;
 
     const repost = await Repost.create({
       _id: postId,
       userId,
       postId,
-      reposted: {
-        avatar: repostedAvatar,
-        username: repostedUsername,
-      },
+      reposted: repostedId,
     });
 
     if (recipientId !== userId) {
@@ -25,7 +22,7 @@ const createRepost = async (req, res) => {
         senderId: userId,
         recipientId: recipientId,
         notifType: "repost",
-        message: `${reposted} Merepost Postinganmu`,
+        message: `${repostedUsername} Merepost Postinganmu`,
       });
     }
 
