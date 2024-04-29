@@ -88,6 +88,32 @@ const getReplies = async (req, res) => {
   }
 };
 
+const getRepliesByUserId = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    if (!userId) {
+      return res.status(404).json({
+        success: false,
+        message: "Post tidak ditemukan",
+      });
+    }
+
+    const replies = await Reply.find({ userId })
+      .populate("userId", "username avatar")
+      .populate("postId", "caption image likes replies createdAt");
+
+    return res.status(200).json({
+      success: true,
+      result: replies,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 const deleteReply = async (req, res) => {
   try {
     const id = req.params.id;
@@ -115,4 +141,5 @@ module.exports = {
   createReply,
   getReplies,
   deleteReply,
+  getRepliesByUserId,
 };

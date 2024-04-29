@@ -10,7 +10,6 @@ const createRepost = async (req, res) => {
     const repostedUsername = req.user.username;
 
     const repost = await Repost.create({
-      _id: postId,
       userId,
       postId,
       reposted: repostedId,

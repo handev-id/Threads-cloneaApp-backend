@@ -48,7 +48,31 @@ router.get("/search", async (req, res) => {
   }
 });
 
-router.get("/profile/:id", async (req, res) => {
+router.get("/profile/:username", async (req, res) => {
+  try {
+    const username = req.params.username;
+    if (!username) {
+      return res.status(400).json({
+        success: false,
+        message: "Data Kurang!",
+      });
+    }
+
+    const userByUsername = await User.findOne({ username });
+    const { password, ...rest } = userByUsername._doc;
+
+    res.status(200).json({
+      success: true,
+      result: rest,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+router.get("/user/:id", async (req, res) => {
   try {
     const id = req.params.id;
     if (!id) {

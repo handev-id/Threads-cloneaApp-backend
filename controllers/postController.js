@@ -50,13 +50,17 @@ const getPosts = async (req, res) => {
 
 const getPostsByUserId = async (req, res) => {
   try {
-    const posts = await Post.find().populate("userId", "username avatar").sort({
-      createdAt: -1,
-    });
+    const userId = req.params.userId;
+    const posts = await Post.find({ userId: userId })
+      .populate("userId", "username avatar")
+      .sort({
+        createdAt: -1,
+      });
 
-    const reposts = await Repost.find()
+    const reposts = await Repost.find({ reposted: userId })
       .populate("userId", "username avatar")
       .populate("postId", "caption image likes replies createdAt")
+      .populate("reposted", "username avatar")
       .sort({
         createdAt: -1,
       });
@@ -79,7 +83,10 @@ const getPostsByUserId = async (req, res) => {
       };
     });
 
-    const result = [...posts, ...repost];
+    const result = {
+      threads: posts,
+      repost: repost,
+    };
 
     return res.status(200).json({
       success: true,
@@ -249,4 +256,5 @@ module.exports = {
   likePost,
   getPostById,
   deletePost,
+  getPostsByUserId,
 };
