@@ -223,19 +223,24 @@ const likePost = async (req, res) => {
 const deletePost = async (req, res) => {
   try {
     const postId = req.params.postId;
+    const userId = req.user.id;
     const isReposted = req.query.isReposted;
     let isDeleteReposted = isReposted === "true" ? true : false;
+
+    // Validasi apakah postId tersedia
     if (!postId) {
       return res.status(400).json({ success: false, message: "Data Kurang" });
     }
 
-    const existingRepost = await Repost.findOne({ postId });
-    if (existingRepost) {
-      await Repost.findByIdAndDelete({ _id: postId });
+    // Menghapus repost jika isDeleteReposted true
+    if (isDeleteReposted) {
+      await Repost.findOneAndDelete({ postId, reposted: userId });
     }
 
+    // Menghapus postingan jika tidak ada repost yang ingin dihapus
     if (!isDeleteReposted) {
-      await Post.findByIdAndDelete({ _id: postId });
+      await Post.findOneAndDelete({ _id: postId });
+      await Repost.deleteMany({ postId });
     }
 
     return res.status(200).json({
@@ -245,7 +250,7 @@ const deletePost = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       success: false,
-      messge: error.message,
+      message: error.message,
     });
   }
 };

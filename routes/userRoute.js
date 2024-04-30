@@ -96,5 +96,31 @@ router.get("/user/:id", async (req, res) => {
     });
   }
 });
+router.patch("/user/update/:id", async (req, res) => {
+  try {
+    const { avatar, username } = req.body;
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Data Kurang!",
+      });
+    }
+
+    await User.findByIdAndUpdate(id, {
+      avatar,
+      username,
+    });
+
+    res.status(200).json({
+      success: true,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
 
 module.exports = router;

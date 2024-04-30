@@ -6,7 +6,6 @@ const repostSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
-      unique: true,
     },
     postId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -17,6 +16,7 @@ const repostSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+      unique: true,
     },
   },
   {
